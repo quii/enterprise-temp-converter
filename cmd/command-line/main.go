@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+
+	"github.com/saltpay/enterprise-temp-converter"
 )
 
 func main() {
@@ -12,27 +14,32 @@ func main() {
 	fmt.Print("Your choice: ")
 	var temp string
 	fmt.Scanln(&temp)
-	fmt.Printf("You chose %q\n", temp)
+
 	switch temp {
 	case "F":
-		fmt.Print("Enter the temperature in Celsius: ")
-		var in string
-		fmt.Scanln(&in)
-		c, err := strconv.ParseFloat(in, 2)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fahrenheit := (c * 9 / 5) + 32
-		fmt.Printf("The temperature %s in Fahrenheit is: %.2f\n", in, fahrenheit)
+		in, temp := PromptForFloat("Enter the temperature in Celsius")
+		fmt.Printf(
+			"The temperature %s in Fahrenheit is: %.2f\n",
+			in,
+			temperature.ConvertCelsiusToFahrenheit(temp),
+		)
 	case "C":
-		fmt.Print("Enter the temperature in Fahrenheit: ")
-		var in string
-		fmt.Scanln(&in)
-		f, err := strconv.ParseFloat(in, 2)
-		if err != nil {
-			log.Fatal(err)
-		}
-		celsius := (f - 32) * 5 / 9
-		fmt.Printf("The temperature %s in Celsius is: %.2f\n", in, celsius)
+		in, temp := PromptForFloat("Enter the temperature in Fahrenheit")
+		fmt.Printf(
+			"The temperature %s in Celsius is: %.2f\n",
+			in,
+			temperature.ConvertFahrenheitToCelsius(temp),
+		)
 	}
+}
+
+func PromptForFloat(prompt string) (string, float64) {
+	fmt.Print(prompt + ": ")
+	var in string
+	fmt.Scanln(&in)
+	f, err := strconv.ParseFloat(in, 2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return in, f
 }
