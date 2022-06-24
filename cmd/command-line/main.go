@@ -37,7 +37,7 @@ func PromptForFloat(prompt string) (string, float64) {
 	fmt.Print(prompt + ": ")
 	var in string
 	fmt.Scanln(&in)
-	f, err := strconv.ParseFloat(in, 2)
+	f, err := strconv.ParseFloat(in, 64)
 	if err != nil {
 		log.Fatal(err)
 	}

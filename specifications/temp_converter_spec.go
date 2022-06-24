@@ -10,7 +10,7 @@ type TempConverterSystem interface {
 	ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error)
 }
 
-func ItConvertsTempsFromCtoF(t *testing.T, system TempConverterSystem) {
+func ItConvertsTemperatures(t *testing.T, system TempConverterSystem) {
 	t.Run("it converts from celsius to fahrenheit", func(t *testing.T) {
 		var (
 			celsius            = 32.0

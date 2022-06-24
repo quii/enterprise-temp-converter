@@ -79,7 +79,7 @@ func (c *CommandLineTempConverterDriver) runProgram(ctx context.Context, choice 
 	indexFunc := strings.LastIndexFunc(lastLine, func(r rune) bool {
 		return r == ':'
 	})
-	result, err := strconv.ParseFloat(lastLine[indexFunc+2:], 2)
+	result, err := strconv.ParseFloat(lastLine[indexFunc+2:], 64)
 	if err != nil {
 		return 0.0, err
 	}
