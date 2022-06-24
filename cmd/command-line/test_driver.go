@@ -49,6 +49,36 @@ func NewCommandLineTempConverterDriver() (*CommandLineTempConverterDriver, error
 	}, nil
 }
 
+func (c *CommandLineTempConverterDriver) ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error) {
+	cmd := exec.Command(c.cmdPath)
+	cmdStdin, err := cmd.StdinPipe()
+	if err != nil {
+		return 0, err
+	}
+
+	var out bytes.Buffer
+	cmd.Stdout = &out
+
+	if err := cmd.Start(); err != nil {
+		return 0, fmt.Errorf("cannot run temp converter: %s", err)
+	}
+	fmt.Fprintln(cmdStdin, "C")
+	fmt.Fprintln(cmdStdin, fmt.Sprintf("%.2f", fahrenheit))
+	cmd.Wait()
+
+	lines := strings.Split(out.String(), "\n")
+	lastLine := lines[len(lines)-2]
+	indexFunc := strings.LastIndexFunc(lastLine, func(r rune) bool {
+		return r == ':'
+	})
+	celsius, err = strconv.ParseFloat(lastLine[indexFunc+2:], 2)
+	if err != nil {
+		return 0.0, err
+	}
+
+	return celsius, err
+}
+
 func (c *CommandLineTempConverterDriver) ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error) {
 	cmd := exec.Command(c.cmdPath)
 	cmdStdin, err := cmd.StdinPipe()
