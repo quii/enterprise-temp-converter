@@ -22,26 +22,11 @@ type CommandLineTempConverterDriver struct {
 }
 
 func NewCommandLineTempConverterDriver() (*CommandLineTempConverterDriver, error) {
-	binName := baseBinName
+	binName, cmdPath, err := buildBinary()
 
-	if runtime.GOOS == "windows" {
-		binName += ".exe"
-	}
-
-	build := exec.Command("go", "build", "-o", binName)
-
-	if err := build.Run(); err != nil {
-		return nil, fmt.Errorf("cannot build tool %s: %s", binName, err)
-	}
-
-	build.Wait()
-
-	dir, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
-
-	cmdPath := filepath.Join(dir, binName)
 
 	return &CommandLineTempConverterDriver{
 		binName: binName,
@@ -58,7 +43,7 @@ func (c *CommandLineTempConverterDriver) ConvertFromCelsiusToFahrenheit(ctx cont
 }
 
 func (c *CommandLineTempConverterDriver) runProgram(ctx context.Context, choice string, temp float64) (conversion float64, err error) {
-	cmd := exec.Command(c.cmdPath)
+	cmd := exec.CommandContext(ctx, c.cmdPath)
 	cmdStdin, err := cmd.StdinPipe()
 	if err != nil {
 		return 0, err
@@ -89,4 +74,29 @@ func (c *CommandLineTempConverterDriver) runProgram(ctx context.Context, choice 
 
 func (c *CommandLineTempConverterDriver) Cleanup() {
 	os.Remove(c.binName)
+}
+
+func buildBinary() (binName, cmdPath string, err error) {
+	binName = baseBinName
+
+	if runtime.GOOS == "windows" {
+		binName += ".exe"
+	}
+
+	build := exec.Command("go", "build", "-o", binName)
+
+	if err := build.Run(); err != nil {
+		return "", "", fmt.Errorf("cannot build tool %s: %s", binName, err)
+	}
+
+	build.Wait()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", "", err
+	}
+
+	cmdPath = filepath.Join(dir, binName)
+
+	return
 }

@@ -1,9 +1,16 @@
 package temperature
 
-func ConvertFahrenheitToCelsius(f float64) float64 {
-	return (f - 32) * 5 / 9
+import (
+	"context"
+)
+
+type Converter struct {
 }
 
-func ConvertCelsiusToFahrenheit(c float64) float64 {
-	return (c * 9 / 5) + 32
+func (c Converter) ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error) {
+	return (celsius * 9 / 5) + 32, nil
+}
+
+func (c Converter) ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error) {
+	return (fahrenheit - 32) * 5 / 9, nil
 }
