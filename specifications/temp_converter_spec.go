@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	temperature "github.com/saltpay/enterprise-temp-converter"
+	"github.com/saltpay/enterprise-temp-converter/assert"
 )
 
 func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem) {
@@ -16,14 +17,8 @@ func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem
 		)
 
 		actualFahrenheit, err := system.ConvertFromCelsiusToFahrenheit(ctx, celsius)
-
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		if actualFahrenheit != expectedFahrenheit {
-			t.Errorf("got %.2f, want %.2f", actualFahrenheit, expectedFahrenheit)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, actualFahrenheit, expectedFahrenheit)
 	})
 
 	t.Run("it converts from fahrenheit to celsius", func(t *testing.T) {
@@ -34,14 +29,8 @@ func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem
 		)
 
 		actualCelsius, err := system.ConvertFromFahrenheitToCelsius(ctx, fahrenheit)
-
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		if actualCelsius != expectedCelsius {
-			t.Errorf("got %.2f, want %.2f", actualCelsius, expectedCelsius)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, actualCelsius, expectedCelsius)
 	})
 
 }

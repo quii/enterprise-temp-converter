@@ -7,6 +7,7 @@ import (
 	"time"
 
 	temperature "github.com/saltpay/enterprise-temp-converter"
+	"github.com/saltpay/enterprise-temp-converter/assert"
 	"github.com/saltpay/enterprise-temp-converter/specifications"
 )
 
@@ -22,11 +23,7 @@ func TestHTTPRouter(t *testing.T) {
 
 	t.Run("returns a bad request with a silly temp", func(t *testing.T) {
 		res, err := http.Get(server.URL + cToFPath + "?temp=lmao")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if res.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status of %v but got %v", http.StatusBadRequest, res.StatusCode)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, res.StatusCode, http.StatusBadRequest)
 	})
 }
