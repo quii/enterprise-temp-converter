@@ -2,9 +2,10 @@ package http
 
 import (
 	"fmt"
-	temperature "github.com/saltpay/enterprise-temp-converter"
 	"net/http"
 	"strconv"
+
+	temperature "github.com/saltpay/enterprise-temp-converter"
 )
 
 const (

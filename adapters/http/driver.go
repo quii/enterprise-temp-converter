@@ -13,7 +13,7 @@ type ConverterDriver struct {
 	client  *http.Client
 }
 
-func NewConverterDriver(baseURL string, client *http.Client) *ConverterDriver {
+func NewConverterHTTPDriver(baseURL string, client *http.Client) *ConverterDriver {
 	return &ConverterDriver{baseURL: baseURL, client: client}
 }
 

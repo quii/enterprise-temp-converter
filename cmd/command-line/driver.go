@@ -1,36 +1,31 @@
-package command_line
+package main
 
 import (
 	"bytes"
 	"context"
 	"fmt"
-	"os"
 	"os/exec"
-	"path/filepath"
-	"runtime"
 	"strconv"
 	"strings"
-)
 
-const (
-	baseBinName = "temp-converter-testbinary"
+	"github.com/saltpay/enterprise-temp-converter/cmd"
 )
 
 type CommandLineTempConverterDriver struct {
-	binName string
 	cmdPath string
+	cleanup func()
 }
 
 func NewCommandLineTempConverterDriver() (*CommandLineTempConverterDriver, error) {
-	binName, cmdPath, err := buildBinary()
+	cleanup, cmdPath, err := cmd.BuildBinary()
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &CommandLineTempConverterDriver{
-		binName: binName,
 		cmdPath: cmdPath,
+		cleanup: cleanup,
 	}, nil
 }
 
@@ -73,30 +68,5 @@ func (c *CommandLineTempConverterDriver) runProgram(ctx context.Context, choice 
 }
 
 func (c *CommandLineTempConverterDriver) Cleanup() {
-	os.Remove(c.binName)
-}
-
-func buildBinary() (binName, cmdPath string, err error) {
-	binName = baseBinName
-
-	if runtime.GOOS == "windows" {
-		binName += ".exe"
-	}
-
-	build := exec.Command("go", "build", "-o", binName)
-
-	if err := build.Run(); err != nil {
-		return "", "", fmt.Errorf("cannot build tool %s: %s", binName, err)
-	}
-
-	build.Wait()
-
-	dir, err := os.Getwd()
-	if err != nil {
-		return "", "", err
-	}
-
-	cmdPath = filepath.Join(dir, binName)
-
-	return
+	c.cleanup()
 }
