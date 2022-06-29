@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	converter, cleanUp, err := cmd.NewApp()
+	service, cleanUp, err := cmd.NewTemperatureConverterService()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer cleanUp()
 
-	command_line.TempConverter(os.Stdin, os.Stdout, converter)
+	command_line.TempConverter(os.Stdin, os.Stdout, service)
 }

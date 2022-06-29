@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	converter, cleanUp, err := cmd.NewApp()
+	service, cleanUp, err := cmd.NewTemperatureConverterService()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer cleanUp()
 
-	router := temphttp.NewRouter(converter)
+	router := temphttp.NewRouter(service)
 
 	if err := http.ListenAndServe(":8080", router); err != nil {
 		log.Fatal(err)

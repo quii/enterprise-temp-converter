@@ -8,7 +8,7 @@ import (
 	"github.com/saltpay/enterprise-temp-converter/assert"
 )
 
-func ItConvertsTemperatures(t *testing.T, driver temperature.TempConverterSystem) {
+func ItConvertsTemperatures(t *testing.T, driver temperature.TempConverterService) {
 	t.Run("it converts from celsius to fahrenheit", func(t *testing.T) {
 		var (
 			celsius            = 32.0

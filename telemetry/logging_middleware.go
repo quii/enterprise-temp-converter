@@ -11,11 +11,11 @@ import (
 
 type LoggerMiddleware struct {
 	out      io.Writer
-	delegate temperature.TempConverterSystem
+	delegate temperature.TempConverterService
 	now      func() time.Time
 }
 
-func NewLoggerMiddleware(out io.Writer, delegate temperature.TempConverterSystem, now func() time.Time) *LoggerMiddleware {
+func NewLoggerMiddleware(out io.Writer, delegate temperature.TempConverterService, now func() time.Time) *LoggerMiddleware {
 	return &LoggerMiddleware{out: out, delegate: delegate, now: now}
 }
 

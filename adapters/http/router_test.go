@@ -12,7 +12,7 @@ import (
 )
 
 func TestHTTPRouter(t *testing.T) {
-	router := NewRouter(temperature.Converter{})
+	router := NewRouter(temperature.Service{})
 	server := httptest.NewServer(router)
 	defer server.Close()
 

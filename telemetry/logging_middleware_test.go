@@ -15,7 +15,7 @@ func TestNewLoggerMiddleware(t *testing.T) {
 		now = func() time.Time {
 			return time.Date(1984, 7, 5, 8, 0, 0, 0, time.UTC)
 		}
-		converter temperature.Converter
+		converter temperature.Service
 		ctx       = context.Background()
 	)
 
