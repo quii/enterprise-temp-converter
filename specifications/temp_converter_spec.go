@@ -3,14 +3,11 @@ package specifications
 import (
 	"context"
 	"testing"
+
+	temperature "github.com/saltpay/enterprise-temp-converter"
 )
 
-type TempConverterSystem interface {
-	ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error)
-	ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error)
-}
-
-func ItConvertsTemperatures(t *testing.T, system TempConverterSystem) {
+func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem) {
 	t.Run("it converts from celsius to fahrenheit", func(t *testing.T) {
 		var (
 			celsius            = 32.0

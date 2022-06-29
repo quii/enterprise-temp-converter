@@ -14,11 +14,11 @@ const (
 )
 
 type converterServer struct {
-	converter temperature.Converter
+	converter temperature.TempConverterSystem
 }
 
-func NewRouter() http.Handler {
-	svr := converterServer{converter: temperature.Converter{}}
+func NewRouter(converter temperature.TempConverterSystem) http.Handler {
+	svr := converterServer{converter: converter}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc(cToFPath, svr.celsiusToFahrenHeit)

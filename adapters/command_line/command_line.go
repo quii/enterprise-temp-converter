@@ -3,13 +3,14 @@ package command_line
 import (
 	"context"
 	"fmt"
-	"github.com/saltpay/enterprise-temp-converter"
 	"io"
 	"log"
 	"strconv"
+
+	"github.com/saltpay/enterprise-temp-converter"
 )
 
-func TempConverter(in io.Reader, out io.Writer, converter temperature.Converter) {
+func TempConverter(in io.Reader, out io.Writer, converter temperature.TempConverterSystem) {
 	fmt.Fprintln(out, "Press C to convert from Fahrenheit to Celsius.")
 	fmt.Fprintln(out, "Press F to convert from Celsius to Fahrenheit.")
 	fmt.Fprintln(out, "Your choice: ")

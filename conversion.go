@@ -4,6 +4,11 @@ import (
 	"context"
 )
 
+type TempConverterSystem interface {
+	ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error)
+	ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error)
+}
+
 type Converter struct {
 }
 

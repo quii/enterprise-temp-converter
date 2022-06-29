@@ -6,11 +6,12 @@ import (
 	"testing"
 	"time"
 
+	temperature "github.com/saltpay/enterprise-temp-converter"
 	"github.com/saltpay/enterprise-temp-converter/specifications"
 )
 
 func TestHTTPRouter(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter(temperature.Converter{})
 	server := httptest.NewServer(router)
 	defer server.Close()
 
