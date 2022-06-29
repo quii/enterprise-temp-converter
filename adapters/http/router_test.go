@@ -9,7 +9,7 @@ import (
 	"github.com/saltpay/enterprise-temp-converter/specifications"
 )
 
-func TestHTTPServer(t *testing.T) {
+func TestHTTPRouter(t *testing.T) {
 	router := NewRouter()
 	server := httptest.NewServer(router)
 	defer server.Close()

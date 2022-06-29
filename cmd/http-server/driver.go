@@ -1,9 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
+	"log"
+	"net"
 	http2 "net/http"
 	"os/exec"
 	"time"
@@ -46,13 +47,22 @@ func (c *HTTPServerTempConverterDriver) ConvertFromCelsiusToFahrenheit(ctx conte
 func (c *HTTPServerTempConverterDriver) runServer(ctx context.Context) (url string, cleanup func() error, err error) {
 	cmd := exec.CommandContext(ctx, c.cmdPath)
 
-	var out bytes.Buffer
-	cmd.Stdout = &out
-
 	if err := cmd.Start(); err != nil {
 		return "", nil, fmt.Errorf("cannot run temp converter: %s", err)
 	}
-	time.Sleep(1 * time.Second) //todo: there will be a better way
+	waitForServerListening()
 
 	return "http://localhost:8080", cmd.Process.Kill, nil
+}
+
+func waitForServerListening() {
+	for i := 0; i < 20; i++ {
+		conn, _ := net.Dial("tcp", net.JoinHostPort("localhost", "8080"))
+		if conn != nil {
+			log.Println("a connection!")
+			conn.Close()
+			break
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 }
