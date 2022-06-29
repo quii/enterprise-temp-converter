@@ -8,7 +8,7 @@ import (
 	"github.com/saltpay/enterprise-temp-converter/assert"
 )
 
-func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem) {
+func ItConvertsTemperatures(t *testing.T, driver temperature.TempConverterSystem) {
 	t.Run("it converts from celsius to fahrenheit", func(t *testing.T) {
 		var (
 			celsius            = 32.0
@@ -16,7 +16,7 @@ func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem
 			ctx                = context.Background()
 		)
 
-		actualFahrenheit, err := system.ConvertFromCelsiusToFahrenheit(ctx, celsius)
+		actualFahrenheit, err := driver.ConvertFromCelsiusToFahrenheit(ctx, celsius)
 		assert.NoError(t, err)
 		assert.Equal(t, actualFahrenheit, expectedFahrenheit)
 	})
@@ -28,7 +28,7 @@ func ItConvertsTemperatures(t *testing.T, system temperature.TempConverterSystem
 			ctx             = context.Background()
 		)
 
-		actualCelsius, err := system.ConvertFromFahrenheitToCelsius(ctx, fahrenheit)
+		actualCelsius, err := driver.ConvertFromFahrenheitToCelsius(ctx, fahrenheit)
 		assert.NoError(t, err)
 		assert.Equal(t, actualCelsius, expectedCelsius)
 	})
