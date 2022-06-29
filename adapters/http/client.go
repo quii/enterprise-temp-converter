@@ -8,24 +8,24 @@ import (
 	"strconv"
 )
 
-type ConverterDriver struct {
+type ConverterHTTPClient struct {
 	baseURL string
 	client  *http.Client
 }
 
-func NewConverterHTTPDriver(baseURL string, client *http.Client) *ConverterDriver {
-	return &ConverterDriver{baseURL: baseURL, client: client}
+func NewConverterHTTPClient(baseURL string, client *http.Client) *ConverterHTTPClient {
+	return &ConverterHTTPClient{baseURL: baseURL, client: client}
 }
 
-func (c *ConverterDriver) ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error) {
+func (c *ConverterHTTPClient) ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error) {
 	return c.convertATemp(ctx, celsius, cToFPath)
 }
 
-func (c *ConverterDriver) ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error) {
+func (c *ConverterHTTPClient) ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error) {
 	return c.convertATemp(ctx, fahrenheit, fToCPath)
 }
 
-func (c *ConverterDriver) convertATemp(ctx context.Context, in float64, path string) (float64, error) {
+func (c *ConverterHTTPClient) convertATemp(ctx context.Context, in float64, path string) (float64, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+path, nil)
 	q := req.URL.Query()
 	q.Add("temp", fmt.Sprintf("%.2f", in))

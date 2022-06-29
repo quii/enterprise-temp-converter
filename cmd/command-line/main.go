@@ -1,16 +1,19 @@
 package main
 
 import (
-	temperature "github.com/saltpay/enterprise-temp-converter"
-	"github.com/saltpay/enterprise-temp-converter/adapters/command_line"
-	"github.com/saltpay/enterprise-temp-converter/telemetry"
-
+	"log"
 	"os"
+
+	"github.com/saltpay/enterprise-temp-converter/adapters/command_line"
+	"github.com/saltpay/enterprise-temp-converter/cmd"
 )
 
 func main() {
-	converter := temperature.Converter{}
-	loggingConverter := telemetry.NewLoggerMiddleware(os.Stderr, converter)
+	converter, cleanUp, err := cmd.NewApp()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cleanUp()
 
-	command_line.TempConverter(os.Stdin, os.Stdout, loggingConverter)
+	command_line.TempConverter(os.Stdin, os.Stdout, converter)
 }

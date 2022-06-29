@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	temperature "github.com/saltpay/enterprise-temp-converter"
 )
@@ -11,10 +12,11 @@ import (
 type LoggerMiddleware struct {
 	out      io.Writer
 	delegate temperature.TempConverterSystem
+	now      func() time.Time
 }
 
-func NewLoggerMiddleware(out io.Writer, delegate temperature.TempConverterSystem) *LoggerMiddleware {
-	return &LoggerMiddleware{out: out, delegate: delegate}
+func NewLoggerMiddleware(out io.Writer, delegate temperature.TempConverterSystem, now func() time.Time) *LoggerMiddleware {
+	return &LoggerMiddleware{out: out, delegate: delegate, now: now}
 }
 
 func (l LoggerMiddleware) ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error) {
@@ -22,7 +24,7 @@ func (l LoggerMiddleware) ConvertFromCelsiusToFahrenheit(ctx context.Context, ce
 	if err != nil {
 		return 0, err
 	}
-	fmt.Fprintf(l.out, "Converted %.2f c to %.2f f\n", celsius, f)
+	fmt.Fprintf(l.out, "%s Converted %.2f c to %.2f f\n", l.dateAndTime(), celsius, f)
 	return f, nil
 }
 
@@ -31,6 +33,10 @@ func (l LoggerMiddleware) ConvertFromFahrenheitToCelsius(ctx context.Context, fa
 	if err != nil {
 		return 0, err
 	}
-	fmt.Fprintf(l.out, "Converted %.2f f to %.2f c\n", fahrenheit, c)
+	fmt.Fprintf(l.out, "%s Converted %.2f f to %.2f c\n", l.dateAndTime(), fahrenheit, c)
 	return c, nil
+}
+
+func (l LoggerMiddleware) dateAndTime() string {
+	return l.now().UTC().Format(time.RFC3339)
 }

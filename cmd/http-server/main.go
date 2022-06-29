@@ -3,18 +3,21 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
-	temperature "github.com/saltpay/enterprise-temp-converter"
 	temphttp "github.com/saltpay/enterprise-temp-converter/adapters/http"
-	"github.com/saltpay/enterprise-temp-converter/telemetry"
+	"github.com/saltpay/enterprise-temp-converter/cmd"
 )
 
 func main() {
-	converter := temperature.Converter{}
-	loggingConverter := telemetry.NewLoggerMiddleware(os.Stderr, converter)
+	converter, cleanUp, err := cmd.NewApp()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cleanUp()
 
-	if err := http.ListenAndServe(":8080", temphttp.NewRouter(loggingConverter)); err != nil {
+	router := temphttp.NewRouter(converter)
+
+	if err := http.ListenAndServe(":8080", router); err != nil {
 		log.Fatal(err)
 	}
 }

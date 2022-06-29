@@ -15,6 +15,6 @@ func TestHTTPRouter(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	driver := NewConverterHTTPDriver(server.URL, &http.Client{Timeout: 2 * time.Second})
+	driver := NewConverterHTTPClient(server.URL, &http.Client{Timeout: 2 * time.Second})
 	specifications.ItConvertsTemperatures(t, driver)
 }

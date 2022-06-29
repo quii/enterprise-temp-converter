@@ -29,7 +29,7 @@ func (c *HTTPServerTempConverterDriver) ConvertFromFahrenheitToCelsius(ctx conte
 	}
 	defer cleanup()
 
-	driver := http.NewConverterHTTPDriver(url, &http2.Client{})
+	driver := http.NewConverterHTTPClient(url, &http2.Client{})
 	return driver.ConvertFromFahrenheitToCelsius(ctx, fahrenheit)
 }
 
@@ -40,7 +40,7 @@ func (c *HTTPServerTempConverterDriver) ConvertFromCelsiusToFahrenheit(ctx conte
 	}
 	defer cleanup()
 
-	driver := http.NewConverterHTTPDriver(url, &http2.Client{})
+	driver := http.NewConverterHTTPClient(url, &http2.Client{})
 	return driver.ConvertFromCelsiusToFahrenheit(ctx, celsius)
 }
 
