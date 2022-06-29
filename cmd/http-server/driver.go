@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 	http2 "net/http"
 	"os/exec"
@@ -59,7 +58,6 @@ func waitForServerListening() {
 	for i := 0; i < 20; i++ {
 		conn, _ := net.Dial("tcp", net.JoinHostPort("localhost", "8080"))
 		if conn != nil {
-			log.Println("a connection!")
 			conn.Close()
 			break
 		}
