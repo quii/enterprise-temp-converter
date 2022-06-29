@@ -7,26 +7,16 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-
-	"github.com/saltpay/enterprise-temp-converter/cmd"
 )
 
 type CommandLineTempConverterDriver struct {
 	cmdPath string
-	cleanup func()
 }
 
-func NewCommandLineTempConverterDriver() (*CommandLineTempConverterDriver, error) {
-	cleanup, cmdPath, err := cmd.BuildBinary()
-
-	if err != nil {
-		return nil, err
-	}
-
+func NewCommandLineTempConverterDriver(cmdPath string) *CommandLineTempConverterDriver {
 	return &CommandLineTempConverterDriver{
 		cmdPath: cmdPath,
-		cleanup: cleanup,
-	}, nil
+	}
 }
 
 func (c *CommandLineTempConverterDriver) ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error) {
@@ -65,8 +55,4 @@ func (c *CommandLineTempConverterDriver) runProgram(ctx context.Context, choice 
 	}
 
 	return result, err
-}
-
-func (c *CommandLineTempConverterDriver) Cleanup() {
-	c.cleanup()
 }
