@@ -1,3 +1,13 @@
+# Enterprise Temperature Converter
+
+![code-structure.png.png](code-structure.png)
+
+## A primer on Acceptance Tests
+
+[Watch Riya and I talked about this!](https://www.youtube.com/watch?v=ZMWJCk_0WrY)
+
+![acceptance-test-specification.png](acceptance-test-specification.png)
+
 # Demo plan
 
 - Demo the two apps
