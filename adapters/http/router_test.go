@@ -15,6 +15,18 @@ func TestHTTPRouter(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	driver := NewConverterHTTPClient(server.URL, &http.Client{Timeout: 2 * time.Second})
-	specifications.ItConvertsTemperatures(t, driver)
+	t.Run("it passes the temp spec", func(t *testing.T) {
+		driver := NewConverterHTTPClient(server.URL, &http.Client{Timeout: 2 * time.Second})
+		specifications.ItConvertsTemperatures(t, driver)
+	})
+
+	t.Run("returns a bad request with a silly temp", func(t *testing.T) {
+		res, err := http.Get(server.URL + cToFPath + "?temp=lmao")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if res.StatusCode != http.StatusBadRequest {
+			t.Errorf("expected status of %v but got %v", http.StatusBadRequest, res.StatusCode)
+		}
+	})
 }

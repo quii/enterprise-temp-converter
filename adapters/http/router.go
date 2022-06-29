@@ -27,17 +27,29 @@ func NewRouter(converter temperature.TempConverterSystem) http.Handler {
 }
 
 func (s converterServer) celsiusToFahrenHeit(w http.ResponseWriter, r *http.Request) {
-	tempQS := r.URL.Query().Get("temp")
-	temp, _ := strconv.ParseFloat(tempQS, 64)
+	temp, err := getTempFromReq(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	f, _ := s.converter.ConvertFromCelsiusToFahrenheit(r.Context(), temp)
 
 	fmt.Fprintf(w, "%.2f", f)
 }
 
 func (s converterServer) fahrenheitToCelsius(w http.ResponseWriter, r *http.Request) {
-	tempQS := r.URL.Query().Get("temp")
-	temp, _ := strconv.ParseFloat(tempQS, 64)
+	temp, err := getTempFromReq(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	c, _ := s.converter.ConvertFromFahrenheitToCelsius(r.Context(), temp)
 
 	fmt.Fprintf(w, "%.2f", c)
+}
+
+func getTempFromReq(r *http.Request) (float64, error) {
+	tempQS := r.URL.Query().Get("temp")
+	temp, err := strconv.ParseFloat(tempQS, 64)
+	return temp, err
 }
