@@ -21,7 +21,7 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 
 	switch temp {
 	case "F":
-		input, temp := promptForFloat(in, "Enter the temperature in Celsius")
+		input, temp := promptForFloat(in, out, "Enter the temperature in Celsius")
 		fahrenheit, _ := converterService.ConvertFromCelsiusToFahrenheit(context.Background(), temp)
 		fmt.Fprintf(
 			out,
@@ -30,7 +30,7 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 			fahrenheit,
 		)
 	case "C":
-		input, temp := promptForFloat(in, "Enter the temperature in Fahrenheit")
+		input, temp := promptForFloat(in, out, "Enter the temperature in Fahrenheit")
 		celsius, _ := converterService.ConvertFromFahrenheitToCelsius(context.Background(), temp)
 		fmt.Fprintf(
 			out,
@@ -41,8 +41,8 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 	}
 }
 
-func promptForFloat(in io.Reader, prompt string) (string, float64) {
-	fmt.Print(prompt + ": ")
+func promptForFloat(in io.Reader, out io.Writer, prompt string) (string, float64) {
+	fmt.Fprint(out, prompt+": ")
 	var input string
 	fmt.Fscanln(in, &input)
 	f, err := strconv.ParseFloat(input, 64)

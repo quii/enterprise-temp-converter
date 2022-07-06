@@ -1,28 +1,22 @@
 package http
 
 import (
-	"net/http"
-	"net/http/httptest"
-	"testing"
-	"time"
-
-	temperature "github.com/saltpay/enterprise-temp-converter"
 	"github.com/saltpay/enterprise-temp-converter/assert"
 	"github.com/saltpay/enterprise-temp-converter/specifications"
+	"net/http"
+	"testing"
 )
 
 func TestHTTPRouter(t *testing.T) {
-	router := NewRouter(temperature.Service{})
-	server := httptest.NewServer(router)
-	defer server.Close()
+	driver, stopServer := NewDriver()
+	defer stopServer()
 
 	t.Run("it passes the temp spec", func(t *testing.T) {
-		driver := NewConverterHTTPClient(server.URL, &http.Client{Timeout: 2 * time.Second})
 		specifications.ItConvertsTemperatures(t, driver)
 	})
 
 	t.Run("returns a bad request with a silly temp", func(t *testing.T) {
-		res, err := http.Get(server.URL + cToFPath + "?temp=lmao")
+		res, err := http.Get(driver.URL + cToFPath + "?temp=lmao")
 		assert.NoError(t, err)
 		assert.Equal(t, res.StatusCode, http.StatusBadRequest)
 	})
