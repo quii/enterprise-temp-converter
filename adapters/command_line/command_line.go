@@ -1,6 +1,7 @@
 package command_line
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"io"
@@ -16,12 +17,13 @@ Your choice: `
 
 func TempConverter(in io.Reader, out io.Writer, converterService temperature.TempConverterService) {
 	fmt.Fprint(out, promptText)
-	var temp string
-	fmt.Fscanln(in, &temp)
 
-	switch temp {
+	scanner := bufio.NewScanner(in)
+	scanner.Scan()
+
+	switch scanner.Text() {
 	case "F":
-		input, temp := promptForFloat(in, out, "Enter the temperature in Celsius")
+		input, temp := promptForFloat(scanner, out, "Enter the temperature in Celsius")
 		fahrenheit, _ := converterService.ConvertFromCelsiusToFahrenheit(context.Background(), temp)
 		fmt.Fprintf(
 			out,
@@ -30,7 +32,7 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 			fahrenheit,
 		)
 	case "C":
-		input, temp := promptForFloat(in, out, "Enter the temperature in Fahrenheit")
+		input, temp := promptForFloat(scanner, out, "Enter the temperature in Fahrenheit")
 		celsius, _ := converterService.ConvertFromFahrenheitToCelsius(context.Background(), temp)
 		fmt.Fprintf(
 			out,
@@ -41,13 +43,12 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 	}
 }
 
-func promptForFloat(in io.Reader, out io.Writer, prompt string) (string, float64) {
+func promptForFloat(scanner *bufio.Scanner, out io.Writer, prompt string) (string, float64) {
 	fmt.Fprint(out, prompt+": ")
-	var input string
-	fmt.Fscanln(in, &input)
-	f, err := strconv.ParseFloat(input, 64)
+	scanner.Scan()
+	f, err := strconv.ParseFloat(scanner.Text(), 64)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return input, f
+	return scanner.Text(), f
 }
