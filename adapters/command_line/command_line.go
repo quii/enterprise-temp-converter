@@ -11,9 +11,13 @@ import (
 	"github.com/saltpay/enterprise-temp-converter"
 )
 
-const promptText = `Press C to convert from Fahrenheit to Celsius.
+const (
+	promptText = `Press C to convert from Fahrenheit to Celsius.
 Press F to convert from Celsius to Fahrenheit.
 Your choice: `
+	convertToFahrenheitChoice = "F"
+	convertToCelsiusChoice    = "C"
+)
 
 func TempConverter(in io.Reader, out io.Writer, converterService temperature.TempConverterService) {
 	fmt.Fprint(out, promptText)
@@ -22,7 +26,7 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 	scanner.Scan()
 
 	switch scanner.Text() {
-	case "F":
+	case convertToFahrenheitChoice:
 		input, temp := promptForFloat(scanner, out, "Enter the temperature in Celsius")
 		fahrenheit, _ := converterService.ConvertFromCelsiusToFahrenheit(context.Background(), temp)
 		fmt.Fprintf(
@@ -31,7 +35,7 @@ func TempConverter(in io.Reader, out io.Writer, converterService temperature.Tem
 			input,
 			fahrenheit,
 		)
-	case "C":
+	case convertToCelsiusChoice:
 		input, temp := promptForFloat(scanner, out, "Enter the temperature in Fahrenheit")
 		celsius, _ := converterService.ConvertFromFahrenheitToCelsius(context.Background(), temp)
 		fmt.Fprintf(

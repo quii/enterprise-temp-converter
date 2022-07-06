@@ -14,25 +14,31 @@ type Driver struct {
 
 func (d Driver) ConvertFromCelsiusToFahrenheit(ctx context.Context, celsius float64) (fahrenheit float64, err error) {
 	var (
-		in  = strings.NewReader(fmt.Sprintf("F\n%.2f", celsius))
+		in  bytes.Buffer
 		out bytes.Buffer
 	)
 
-	TempConverter(in, &out, temperature.Service{})
-	return extractTempFromStdout(out)
+	fmt.Fprintln(&in, convertToFahrenheitChoice)
+	fmt.Fprintln(&in, celsius)
+
+	TempConverter(&in, &out, temperature.Service{})
+	return extractTempFromStdout(&out)
 }
 
 func (d Driver) ConvertFromFahrenheitToCelsius(ctx context.Context, fahrenheit float64) (celsius float64, err error) {
 	var (
-		in  = strings.NewReader(fmt.Sprintf("C\n%.2f", fahrenheit))
+		in  bytes.Buffer
 		out bytes.Buffer
 	)
 
-	TempConverter(in, &out, temperature.Service{})
-	return extractTempFromStdout(out)
+	fmt.Fprintln(&in, convertToCelsiusChoice)
+	fmt.Fprintln(&in, fahrenheit)
+
+	TempConverter(&in, &out, temperature.Service{})
+	return extractTempFromStdout(&out)
 }
 
-func extractTempFromStdout(out bytes.Buffer) (float64, error) {
+func extractTempFromStdout(out *bytes.Buffer) (float64, error) {
 	output := out.String()
 	resultTxt := strings.TrimSpace(output[len(output)-7:])
 	return strconv.ParseFloat(resultTxt, 64)
