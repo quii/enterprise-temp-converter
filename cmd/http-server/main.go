@@ -8,6 +8,8 @@ import (
 	"github.com/saltpay/enterprise-temp-converter/cmd"
 )
 
+const port = ":8080"
+
 func main() {
 	service, cleanUp, err := cmd.NewTemperatureConverterService()
 	if err != nil {
@@ -17,7 +19,7 @@ func main() {
 
 	router := temphttp.NewRouter(service)
 
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	if err := http.ListenAndServe(port, router); err != nil {
 		log.Fatal(err)
 	}
 }

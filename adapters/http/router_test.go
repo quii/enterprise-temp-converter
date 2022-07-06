@@ -12,7 +12,7 @@ func TestHTTPRouter(t *testing.T) {
 	defer stopServer()
 
 	t.Run("it passes the temp spec", func(t *testing.T) {
-		specifications.ItConvertsTemperatures(t, driver)
+		specifications.ConvertTemperatures(t, driver)
 	})
 
 	t.Run("returns a bad request with a silly temp", func(t *testing.T) {

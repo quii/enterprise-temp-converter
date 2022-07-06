@@ -15,5 +15,5 @@ func TestCommandLineTempConverterDriver_ConvertFromCelsiusToFahrenheit(t *testin
 	t.Cleanup(cleanup)
 
 	driver := NewCommandLineTempConverterDriver(binPath)
-	specifications.ItConvertsTemperatures(t, driver)
+	specifications.ConvertTemperatures(t, driver)
 }

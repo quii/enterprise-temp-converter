@@ -6,7 +6,5 @@ import (
 )
 
 func TestTempConverter(t *testing.T) {
-	t.Run("it passes the temp converter spec", func(t *testing.T) {
-		specifications.ItConvertsTemperatures(t, Driver{})
-	})
+	specifications.ConvertTemperatures(t, Driver{})
 }

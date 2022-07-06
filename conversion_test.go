@@ -8,6 +8,5 @@ import (
 )
 
 func TestCommandLineTempConverterDriver_ConvertFromCelsiusToFahrenheit(t *testing.T) {
-	service := temperature.Service{}
-	specifications.ItConvertsTemperatures(t, service)
+	specifications.ConvertTemperatures(t, temperature.Service{})
 }

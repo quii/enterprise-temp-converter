@@ -15,5 +15,5 @@ func TestHTTPServerTempConverterDriver_ConvertFromCelsiusToFahrenheit(t *testing
 	t.Cleanup(cleanup)
 
 	driver := NewHTTPServerTempConverterDriver(binPath)
-	specifications.ItConvertsTemperatures(t, driver)
+	specifications.ConvertTemperatures(t, driver)
 }
